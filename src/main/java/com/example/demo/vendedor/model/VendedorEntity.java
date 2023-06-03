@@ -1,13 +1,10 @@
-package com.example.demo.model;
+package com.example.demo.vendedor.model;
 
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Builder
@@ -17,10 +14,12 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @Table(name = "vendedor")
+@ToString
 public class VendedorEntity {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String nome;
     private String telefone;
