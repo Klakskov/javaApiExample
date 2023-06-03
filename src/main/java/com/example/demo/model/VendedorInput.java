@@ -1,11 +1,11 @@
 package com.example.demo.model;
+import lombok.*;
 
-
-/*@Builder
+@Builder
 @Setter
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor*/
+@NoArgsConstructor
 public class VendedorInput {
 
     private String nome;

@@ -1,14 +1,16 @@
 package com.example.demo.model;
 
 
+import lombok.*;
+
 import java.time.LocalDate;
 
-/*@Builder
+@Builder
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString*/
+@ToString
 public class Vendedor {
 
     private long id;
