@@ -1,6 +1,8 @@
 package com.example.demo.vendedor.model;
-import com.sun.istack.NotNull;
 import lombok.*;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 @Builder
 @Setter
@@ -14,7 +16,8 @@ public class VendedorInput {
     @NotNull
     private String telefone;
     @NotNull
-    private int idade;
+    @Positive
+    private Integer idade;
     @NotNull
     private String cidade;
     @NotNull

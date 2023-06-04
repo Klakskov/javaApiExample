@@ -19,7 +19,13 @@ public class VendedorEntity {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "seq_vendedor"
+    )
+    @SequenceGenerator(
+            name = "seq_vendedor"
+    )
     private long id;
     private String nome;
     private String telefone;

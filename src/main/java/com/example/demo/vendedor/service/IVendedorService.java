@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IVendedorService {
 
-    void createVendedor(Vendedor vendedorInput);
+    Vendedor createVendedor(Vendedor vendedorInput);
 
     VendedorDto getVendedorById(long id);
 

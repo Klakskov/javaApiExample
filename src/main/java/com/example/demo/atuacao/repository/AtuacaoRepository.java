@@ -4,39 +4,38 @@ import com.example.demo.atuacao.mapper.IAtuacaoMappper;
 import com.example.demo.atuacao.model.Atuacao;
 import com.example.demo.atuacao.model.AtuacaoEntity;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Entity;
 import java.util.Collections;
 import java.util.List;
 
 @Component
 @Slf4j
-public class AtuacaoRepository implements IAtuacaoRepository{
+class AtuacaoRepository implements IAtuacaoRepository{
 
-    private final IAtuacaoMappper mappper;
+    @Autowired
     private final SpringDataAtuacaoRepository repository;
 
-    public AtuacaoRepository(IAtuacaoMappper mappper, SpringDataAtuacaoRepository repository) {
-        this.mappper = mappper;
+    public AtuacaoRepository(SpringDataAtuacaoRepository repository) {
         this.repository = repository;
     }
 
     @Override
     public Atuacao save(Atuacao atuacao) {
         log.info("creating atuacao {} ... ", atuacao);
-        AtuacaoEntity entity = mappper.atuacaoToAtuacaoEntity(atuacao);
+        AtuacaoEntity entity = IAtuacaoMappper.INSTANCE.atuacaoToAtuacaoEntity(atuacao);
         entity = repository.save(entity);
         log.info("atuacao created with id {} ...", entity.getId());
 
-        return mappper.atuacaoEntityToAtuacao(entity);
+        return IAtuacaoMappper.INSTANCE.atuacaoEntityToAtuacao(entity);
     }
 
     @Override
     public Atuacao getByRegiao(String regiao) {
         log.info("getting atuacao by regiao {} ...", regiao);
 
-        return mappper.atuacaoEntityToAtuacao(
+        return IAtuacaoMappper.INSTANCE.atuacaoEntityToAtuacao(
                 repository.getByRegiao(regiao)
         );
     }
@@ -45,6 +44,12 @@ public class AtuacaoRepository implements IAtuacaoRepository{
     public List<String> getEstadosByRegiao(String regiao) {
         log.info("getting estados atuacao by regiao {} ...", regiao);
         AtuacaoEntity entity = repository.getByRegiao(regiao);
-        return entity != null ? entity.getEstados() : Collections.emptyList();
+
+        if(entity == null ){
+            log.info("estados no found for region {} returning empty list ...",
+                    regiao);
+            return Collections.emptyList();
+        }
+        return entity.getEstados() ;
     }
 }

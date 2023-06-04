@@ -1,6 +1,5 @@
 package com.example.demo.atuacao.model;
 
-import com.sun.istack.NotNull;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,7 +17,13 @@ public class AtuacaoEntity {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "seq_atuacao"
+    )
+    @SequenceGenerator(
+            name = "seq_atuacao"
+    )
     private long id;
     private String regiao;
     @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)

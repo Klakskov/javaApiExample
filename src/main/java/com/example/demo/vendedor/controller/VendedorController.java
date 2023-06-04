@@ -10,31 +10,29 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("vendedor")
+@RequestMapping(value = "vendedor")
 class VendedorController implements IVendedorController {
 
 
     @Autowired
     private final IVendedorService vendedorService;
 
-    @Autowired
-    private final IVendedorMapper mapper;
-    public VendedorController(IVendedorService vendedorService, IVendedorMapper mapper) {
+    public VendedorController(IVendedorService vendedorService) {
         this.vendedorService = vendedorService;
-        this.mapper = mapper;
     }
 
     @Override
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody @Validated  VendedorInput vendedorInput) {
+    public ResponseEntity<Void> create(@RequestBody @Valid VendedorInput vendedorInput) {
         vendedorService.createVendedor(
-                mapper.vendedorInputToVendedor(vendedorInput)
+                IVendedorMapper.INSTANCE.vendedorInputToVendedor(vendedorInput)
         );
         return ResponseEntity.status(CREATED).build();
 
@@ -51,7 +49,7 @@ class VendedorController implements IVendedorController {
     }
 
     @Override
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<VendedorAtuacaoDto> > getVendedorAtuacao() {
         List<VendedorAtuacaoDto> dto = vendedorService.getVendedorAtuacaoDto();
         if(dto == null || dto.isEmpty()){

@@ -11,14 +11,12 @@ import static org.springframework.http.HttpStatus.CREATED;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("atuacao")
+@RequestMapping(value = "atuacao")
 class AtuacaoController implements IAtuacaoController{
 
-    private final IAtuacaoMappper mappper;
     private final IAtuacaoService service;
 
-    AtuacaoController(IAtuacaoMappper mappper, IAtuacaoService service) {
-        this.mappper = mappper;
+    AtuacaoController(IAtuacaoService service) {
         this.service = service;
     }
 
@@ -27,7 +25,7 @@ class AtuacaoController implements IAtuacaoController{
     public ResponseEntity<Void> create(@RequestBody @Validated AtuacaoInput atuacaoInput) {
 
         service.create(
-                mappper.atuacaoInputToAtuacao(atuacaoInput)
+                IAtuacaoMappper.INSTANCE.atuacaoInputToAtuacao(atuacaoInput)
         );
         return ResponseEntity.status(CREATED).build();
     }

@@ -11,4 +11,5 @@ public interface IAtuacaoRepository {
     Atuacao getByRegiao(String regiao);
     List<String> getEstadosByRegiao(String regiao);
 
+
 }

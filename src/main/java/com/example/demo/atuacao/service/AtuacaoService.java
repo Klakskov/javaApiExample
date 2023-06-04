@@ -1,33 +1,27 @@
 package com.example.demo.atuacao.service;
 
-import com.example.demo.atuacao.mapper.IAtuacaoMappper;
 import com.example.demo.atuacao.model.Atuacao;
 import com.example.demo.atuacao.repository.IAtuacaoRepository;
 import com.example.demo.exceptions.model.ValidationRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
+@Transactional
 class AtuacaoService implements IAtuacaoService {
 
-    private final IAtuacaoMappper mappper;
     private final IAtuacaoRepository repository;
 
-    AtuacaoService(IAtuacaoMappper mappper, IAtuacaoRepository repository) {
-        this.mappper = mappper;
+    AtuacaoService(IAtuacaoRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public void create(Atuacao atuacao) {
+    public Atuacao create(Atuacao atuacao) {
         validateAtuacaoCreation(atuacao);
-        repository.save(atuacao);
-    }
-
-    @Override
-    public Atuacao getByRegiao(String regiao) {
-        return repository.getByRegiao(regiao);
+        return repository.save(atuacao);
     }
 
     private void validateAtuacaoCreation(Atuacao atuacao) {

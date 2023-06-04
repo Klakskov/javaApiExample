@@ -11,16 +11,15 @@ import com.example.demo.vendedor.repository.IVendedorRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@Transactional
 class VendedorService implements IVendedorService {
-
-    @Autowired
-    private final IVendedorMapper mapper;
 
     @Autowired
     private final IVendedorRepository vendedorRepository;
@@ -28,26 +27,32 @@ class VendedorService implements IVendedorService {
     @Autowired
     private final IAtuacaoRepository atuacaoRepository;
 
-    public VendedorService(IVendedorMapper mapper,
-                           IVendedorRepository vendedorRepository,
+    public VendedorService(IVendedorRepository vendedorRepository,
                            IAtuacaoRepository atuacaoRepository) {
-        this.mapper = mapper;
         this.vendedorRepository = vendedorRepository;
         this.atuacaoRepository = atuacaoRepository;
     }
 
     @Override
-    public void createVendedor(Vendedor vendedor) {
+    public Vendedor createVendedor(Vendedor vendedor) {
         log.info("creating vendedor {} ..." , vendedor);
-        vendedorRepository.save(vendedor);
+        return vendedorRepository.save(vendedor);
 
     }
 
     @Override
     public VendedorDto getVendedorById(long id) {
+        Vendedor vendedor = vendedorRepository.getById(id);
+
+        if(vendedor == null) {
+            log.info("vendedor nao encontrado para id {}", id);
+            return null;
+        }
+        List<String> estados  = atuacaoRepository.getEstadosByRegiao(vendedor.getRegiao());
+
         return
-                mapper.vendedorToVendedorDTO(
-                        vendedorRepository.getById(id)
+                IVendedorMapper.INSTANCE.vendedorToVendedorDTO(
+                        vendedor, estados
                 );
     }
 
@@ -60,7 +65,7 @@ class VendedorService implements IVendedorService {
                 .map(
                         ele -> {
                             List<String> estadosAtuacao = atuacaoRepository.getEstadosByRegiao(ele.getRegiao());
-                            return mapper.vendedorToVendedorAtuacaoDTO(ele, estadosAtuacao);
+                            return IVendedorMapper.INSTANCE.vendedorToVendedorAtuacaoDTO(ele, estadosAtuacao);
                         }
                 ).collect(Collectors.toList());
     }

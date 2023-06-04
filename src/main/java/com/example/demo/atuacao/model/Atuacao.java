@@ -1,6 +1,5 @@
 package com.example.demo.atuacao.model;
 
-import com.sun.istack.NotNull;
 import lombok.*;
 
 import java.util.List;
